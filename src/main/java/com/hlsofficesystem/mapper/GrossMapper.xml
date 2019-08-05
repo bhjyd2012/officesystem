@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hlsofficesystem.mapper.GrossMapper">
+
+    <!-- 开启二级缓存 -->
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hlsofficesystem.bean.Gross">
+        <id column="id" property="id" />
+        <result column="jingli" property="jingli" />
+        <result column="dudao" property="dudao" />
+        <result column="cantingId" property="cantingId" />
+        <result column="cantingName" property="cantingName" />
+        <result column="date" property="date" />
+        <result column="shouruType" property="shouruType" />
+        <result column="TC" property="tc" />
+        <result column="yingyee" property="yingyee" />
+        <result column="wuliaochengben" property="wuliaochengben" />
+        <result column="maoli" property="maoli" />
+        <result column="maolilv" property="maolilv" />
+        <result column="shangzhoutongbiyingyee" property="shangzhoutongbiyingyee" />
+        <result column="shangzhoutongbimaoli" property="shangzhoutongbimaoli" />
+        <result column="shangzhoutongbimaolilv" property="shangzhoutongbimaolilv" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, jingli, dudao, cantingId, cantingName, date, shouruType, TC, yingyee, wuliaochengben, maoli, maolilv, shangzhoutongbiyingyee, shangzhoutongbimaoli, shangzhoutongbimaolilv
+    </sql>
+
+</mapper>

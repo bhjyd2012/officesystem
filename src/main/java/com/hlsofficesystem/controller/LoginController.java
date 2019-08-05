@@ -64,14 +64,5 @@ public class LoginController {
 		return PREFIX+"level3/"+path;
 	}
 
-	/*
-	 * @PostMapping("/userlogin") public String singIn(String username,String
-	 * password,HttpSession session,Map<String, Object> model) { if
-	 * (!StringUtils.isEmpty(username)&&"123456".equals(password)) {
-	 * session.setAttribute("username", username); return "redirect:/success.html";
-	 * } else { model.put("msg", "用户名或密码错误！"); return "login"; }
-	 * 
-	 * 
-	 * }
-	 */
+	
 }

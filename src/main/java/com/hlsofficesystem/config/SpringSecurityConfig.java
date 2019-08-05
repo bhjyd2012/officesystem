@@ -36,6 +36,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         http.rememberMe().rememberMeParameter("remeber");
         //登陆成功以后，将cookie发给浏览器保存，以后访问页面带上这个cookie，只要通过检查就可以免登录
         //点击注销会删除cookie
+        http.cors().disable();
 	}
 	
 	//定义认证规则

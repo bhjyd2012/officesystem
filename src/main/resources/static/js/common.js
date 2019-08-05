@@ -35,7 +35,7 @@ $(function(){
    			if (num==1) {
    				if (confirm("下载Excel模板")==true) {
    					//window.open("/static/exceltemplate/gross.xls");
-   				 	window.location.href = "/gross/downloadExcel";
+   				 	window.location.href = "/crud/gross/downloadExcel";
    			
    				 	
    				}
@@ -44,7 +44,7 @@ $(function(){
    			if (num==2) {
    				if (confirm("下载Excel模板")==true) {
    					//window.location.href = "";
-   					window.location.href = "/regionalprofit/downloadExcel";
+   					window.location.href = "/crud/regionalprofit/downloadExcel";
 		}
    			}
    			if (num==3) {
@@ -90,36 +90,37 @@ $(function(){
    			if (confirm("确定导入Excel文件！")==true) {
 	   			if(num==1){
 	   				if ($('#location01').val()!="") {
-	   					alert($("[name='importFileForm']")[0]);
-	   					if($("[name='importFileForm']")[0]!=null){
-	   						var formData = new FormData($("[name='importFileForm']")[0]);
+	   					alert($("#importFileForm")[0]);
+	   					if($("#importFileForm")[0]!=null){
+	   						var formData = new FormData($("#importFileForm")[0]);
+	   						alert("123456");
 	   						$.ajax({
 	   							type:"post",
-	   							url:"/gross/uploadExcel",
+	   							url:"/crud/gross/uploadExcel",
 	   							data:formData,
 	   							async:false,
 	   							cache: false, 
-				                  contentType: false, 
-				                  processData: false, 
-				                  success: function (result) {
-				                     alert(result.message);
-				                  },
-				                  error : function() {
-				                      alert("提交异常!");
-				                  }
+				                contentType: false, 
+				                processData: false, 
+				                success: function (result) {
+				                    alert(result.message);
+				                },
+				                error : function() {
+				                     alert("提交异常!");
+				                }
 	   						});
 	   					}	
 	   				} else{
 	   					alert("请选择要导入的数据表格！");
 	   				}
 	   			}
+	   			
 	   			if(num==2){
 	   			
    				if ($('#location02').val()!="") {
    					//alert($("[name='importFileForm']")[1])
-   					if($("[name='importFileForm']")[1]!=null){
-   						    
-	   						var formData = new FormData($("[name='importFileForm']")[1]);
+   					if($("[name='importFileForm']")[0]!=null){
+	   						var formData = new FormData($("[name='importFileForm']")[0]);
 	   						alert(formData);
 	   						$.ajax({
 	   							type:"post",

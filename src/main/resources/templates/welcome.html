@@ -3,7 +3,7 @@
 	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>管理系统后台首页</title>
 </head>
 <body>
 <h1 align="center">欢迎光临管理系统</h1>
@@ -21,31 +21,31 @@
 <hr>
 
 <div sec:authorize="hasRole('VIP1')">
-	<h3>普通武功秘籍</h3>
+	<h3>财务统计</h3>
 	<ul>
-		<li><a th:href="@{/level1/1}">罗汉拳</a></li>
-		<li><a th:href="@{/level1/2}">武当长拳</a></li>
-		<li><a th:href="@{/level1/3}">全真剑法</a></li>
+		<li><a th:href="@{/level1/uploadExcel}">财务统计报表上传</a></li>
+		<li><a th:href="@{/level1/2}">财务统计报表展示</a></li>
+		<li><a th:href="@{/level1/3}">财务统计报表下载</a></li>
 	</ul>
 
 </div>
 
 <div sec:authorize="hasRole('VIP2')">
-	<h3>高级武功秘籍</h3>
+	<h3>区域利润统计</h3>
 	<ul>
-		<li><a th:href="@{/level2/1}">太极拳</a></li>
-		<li><a th:href="@{/level2/2}">七伤拳</a></li>
-		<li><a th:href="@{/level2/3}">梯云纵</a></li>
+		<li><a th:href="@{/level2/1}">区域利润统计报表上传</a></li>
+		<li><a th:href="@{/level2/2}">区域利润统计报表展示</a></li>
+		<li><a th:href="@{/level2/3}">区域利润统计报表下载</a></li>
 	</ul>
 
 </div>
 
 <div sec:authorize="hasRole('VIP3')">
-	<h3>绝世武功秘籍</h3>
+	<h3>物资统计</h3>
 	<ul>
-		<li><a th:href="@{/level3/1}">葵花宝典</a></li>
-		<li><a th:href="@{/level3/2}">龟派气功</a></li>
-		<li><a th:href="@{/level3/3}">独孤九剑</a></li>
+		<li><a th:href="@{/level3/1}">物资统计报表上传</a></li>
+		<li><a th:href="@{/level3/2}">物资统计报表展示</a></li>
+		<li><a th:href="@{/level3/3}">物资统计报表下载</a></li>
 	</ul>
 </div>
 
