@@ -81,7 +81,7 @@ public class GrossController {
 				  uploadFile.transferTo(new File(realPath+"\\"+filename));
 				  System.out.println("uploadurl+++++++"+uploadFile);
 				  //4、给数据库添加数据
-				  List<Gross> grosses = GrossUploadExcel.grossUploadExcel(uploadFile);
+				  List<Gross> grosses = GrossUploadExcel.grossUploadExcel(filename,realPath);
 				  for (Gross gross : grosses) {
 				       System.out.println("----------"+gross);
 				    }

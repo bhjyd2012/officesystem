@@ -44,16 +44,17 @@ public class GrossUploadExcel {
 	 * @return: List<Gross>      
 	 * @throws   
 	 */  
-	public static List<Gross> grossUploadExcel(MultipartFile uploadFile)throws Exception{
+	public static List<Gross> grossUploadExcel(String filename,String path)throws Exception{
 		List<Gross> grosses = new ArrayList<Gross>();
 		/*
 		 * File file = new File(pathUrl); InputStream inputStream = new
 		 * FileInputStream(file); POIFSFileSystem fs = new POIFSFileSystem(inputStream);
 		 */
-		String filename = uploadFile.getOriginalFilename();
-		System.out.println("web++++:"+filename);
+		//String filename = uploadFile.getOriginalFilename();
+		//System.out.println("web++++:"+filename);
+		System.out.println("web++++:"+filename+"-----------"+path);
 		//创建excel对象变量
-		Workbook workbook = ExcelUtil.creatWorkbook(filename, uploadFile);
+		Workbook workbook = ExcelUtil.creatWorkbook(filename, path);
 		System.out.println("web++++:"+workbook);
 		Sheet sheet = workbook.getSheetAt(0);//获取第一个sheet
 		System.out.println("sheet:"+sheet);
@@ -163,7 +164,7 @@ public class GrossUploadExcel {
 				gross.setSupervisor(ExcelUtil.formatCell(cell));
 			}
 			if (j==3) {
-				gross.setRestaurantNum(ExcelUtil.formatCell(cell).replace(".0", ""));
+				gross.setRestaurantNum(ExcelUtil.formatCell(cell).replace(".0",""));
 			}
 			if (j==4) {
 				gross.setRestaurantName(ExcelUtil.formatCell(cell));

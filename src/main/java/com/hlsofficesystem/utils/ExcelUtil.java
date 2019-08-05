@@ -78,7 +78,7 @@ public class ExcelUtil {
 		String str = ExcelUtil.formatCell(cell);
 		System.out.println(str+"------bigd");
 		BigDecimal num = null;
-		if (!str.equals("")||str!=null) {
+		if (!str.equals("")) {
 			num = new BigDecimal(str);
 		}
 		return num;
@@ -87,25 +87,25 @@ public class ExcelUtil {
 	/**
 	 * 根据对应文件后缀，返回 workbook对象
 	 */
-	public static Workbook creatWorkbook(String filename, MultipartFile uploadFile) {
-		System.out.println(filename+"=====rrrrrrrrrrrrrrrrrrrrrrr====="+uploadFile);
+	public static Workbook creatWorkbook(String filename,String path) {
+		//System.out.println(filename+"=====rrrrrrrrrrrrrrrrrrrrrrr====="+uploadFile);
 		// 1. 定义excel对象变量
 		Workbook workbook = null;
 		try {
 			// 2. 判断后缀.决定使用的解析方式. 决定如何创建具体的对象
-			if (filename.endsWith("xls")) {
+			if (filename.endsWith(".xls")) {
 				System.out.println("执行的是xls");
 				// Excel-2003
-				workbook = new HSSFWorkbook(uploadFile.getInputStream());
-			} else if (filename.endsWith("xlsx")) {
+				workbook = new HSSFWorkbook(new FileInputStream(path+"\\"+filename));
+			} else if (filename.endsWith(".xlsx")) {
 				System.out.println("执行的是xlsx");
 				// Excel-2007
-				System.out.println(uploadFile);
-				workbook = new XSSFWorkbook(uploadFile.getInputStream());
+				//System.out.println(uploadFile);
+				workbook = new XSSFWorkbook(new FileInputStream(path+"\\"+filename));
 				
 			} else {
 				// 未知内容
-				//return null;
+				return null;
 			}
 
 		} catch (IOException e) {
