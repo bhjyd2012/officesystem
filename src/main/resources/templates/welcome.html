@@ -51,6 +51,15 @@
 	</ul>
 </div>
 
+<div sec:authorize="hasRole('VIP4')">
+	<h3>权限管理</h3>
+	<ul>
+		<li><a th:href="@{/level3/1}">物资统计报表上传</a></li>
+		<li><a th:href="@{/level3/2}">物资统计报表展示</a></li>
+		<li><a th:href="@{/level3/3}">物资统计报表下载</a></li>
+	</ul>
+</div>
+
 
 </body>
 </html>

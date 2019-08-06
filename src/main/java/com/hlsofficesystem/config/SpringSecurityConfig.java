@@ -17,7 +17,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
         		.antMatchers("/").permitAll()
                 .antMatchers("/level1/**").hasRole("VIP1")
                 .antMatchers("/level2/**").hasRole("VIP2")
-                .antMatchers("/level3/**").hasRole("VIP3");
+                .antMatchers("/level3/**").hasRole("VIP3")
+                .antMatchers("/power/**").hasRole("VIP4");
+        
 
         //开启自动配置的登陆功能，效果，如果没有登陆，没有权限就会来到登陆页面
         http.formLogin().usernameParameter("username").passwordParameter("password")
