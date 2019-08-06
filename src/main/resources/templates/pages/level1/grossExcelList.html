@@ -1,23 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" isELIgnored="false"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Gross数据展示</title>
-   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/common.css">
-   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/main.css">
-   <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery-3.4.1.min.js"></script>
-   <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/colResizable-1.3.min.js"></script>
-   <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/common.js"></script>
-   <script type="text/javascript">
+   <link rel="stylesheet" href="/static/css/common.css" th:href="@{/css/common.css}">
+   <link rel="stylesheet" href="/static/css/main.css" th:href="@{/css/main.css}">
+   <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+   <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+   <script type="text/javascript" src="/static/js/colResizable-1.3.min.js" th:src="@{/js/colResizable-1.3.min.js}"></script>
+   <script type="text/javascript" src="/static/js/common.js" th:src="@{/js/common.js}"></script>
+   <script type="text/javascript" th:inline="javascript">
+        var local = [[${#httpServletRequest.getContextPath()}]];
    	  //跳转页码  
 	  function goPage(pageIndex) {
 		  var pageSize=$("#pageNumber").val();// 新的页面大小
 		//attr,修改属性
-		$("#grossForm").attr("action","${pageContext.request.contextPath}/gross/showList/"+pageIndex+"/"+pageSize);
+		$("#grossForm").attr("action",local+"/level1/gross/showList/"+pageIndex+"/"+pageSize);
 		$("#grossForm").submit();//提交表单,把参数也提交
 	  }
 	//输入页码跳转指定页 
@@ -28,7 +26,7 @@
 			var pattern = /^[0-9]*$/;
 			var b = pattern.test($.trim(number));
 			if(b==true){
-				if(number=>1&&number<=${pager.pageIndex}){
+				if(number=>1&&number<=[[${pager.pageIndex}]]){
 				goPage($.trim(number));
 				}
 			}
@@ -40,7 +38,7 @@
 	//动态修改页面大小
 	function chagePageSize(pageIndex){
 		var pageSize=$("#pageNumber").val();// 新的页面大小
-		$("#grossForm").attr("action","${pageContext.request.contextPath}/gross/showList/"+pageIndex+"/"+pageSize);
+		$("#grossForm").attr("action",local+"/level1/gross/showList/"+pageIndex+"/"+pageSize);
 		$("#grossForm").submit();//提交表单,把参数也提交
 	}
 	
@@ -65,10 +63,16 @@
 			startDate.val("");
 			endDate.val("");
 			//跳转查询请求
-			window.location.href="/gross/showList/1/10";
+			window.location.href=local+"/level1/gross/showList/1/10";
 		}
 		 
 	}
+  	
+	function delall(){
+		alert("是否删除?");
+		alert([[${#httpServletRequest.getContextPath()}]]);
+	}
+  	
    </script>
 </head>
 <body>
@@ -77,24 +81,26 @@
        <div class="box">
           <div class="box_border">
             <div style="font-size:16px;margin-top: 20px;" align="center"><b>Gross数据展示</b></div>
-        <form action="${pageContext.request.contextPath}/gross/showList/1/10" method="post" id="grossForm">    
+            
+        <form action="gross/showList/1/10" method="post" id="grossForm" th:action="@{/level1/gross/showList/1/10}">    
             <div class="box_center pt10 pb10">
               <table class="form_table" border="0" cellpadding="0" cellspacing="0" style="margin: auto;">
                 <tr>
                   <!--<td>标题</td>-->
                   <td>
-                  <input type="text" name="title" class="input-text lh25" size="60" placeholder="输入搜索条件(餐厅名称)" value="${query.title}"/>
+                  <input type="text" name="title" class="input-text lh25" size="60" placeholder="输入搜索条件(餐厅名称)" th:value="${query.title}"/>
                   </td>                
                   <td>时间</td>
                   <td>
-                       <input type="text" name="startDate" class="input-text lh25" size="20" placeholder="开始时间（2019/7/28）" value="${query.startDate}"/>
+                       <input type="text" name="startDate" class="input-text lh25" size="20" placeholder="开始时间（2019/7/28）" th:value="${query.startDate}"/>
                        	至
-                       <input type="text" name="endDate" class="input-text lh25" size="20" placeholder="结束时间（2019/7/28）" value="${query.endDate}"/>
+                       <input type="text" name="endDate" class="input-text lh25" size="20" placeholder="结束时间（2019/7/28）" th:value="${query.endDate}"/>
                   </td>
                   <td>
                   <input type="submit" name="button" class="btn btn82 btn_search" value="查询">
-			      <input type="button" name="qingkong" class="btn btn82 btn_recycle" value="清空" onclick="clearInfo()"/>
-			      <input type="button" name="alldelete" class="btn btn82 btn_del" value="删除" onclick="delall()"/>
+                  <!-- |javascript:fungetone(${con.uid})| -->
+			      <input type="button" name="qingkong" class="btn btn82 btn_recycle" value="清空" th:onclick="|javascript:clearInfo()|"/>
+			      <input type="button" name="alldelete" class="btn btn82 btn_del" value="删除" th:onclick="|delall()|"/>
 			      </td>
                 </tr>
                
@@ -103,8 +109,9 @@
         </form>
              <div  class="box_bottom pb5 pt5 pr10" style="border-top:1px solid #dadada;">
               <div class="search_bar_btn" style="text-align:center;" >
-                 <a href="${pageContext.request.contextPath}/templates/uploadExcel.jsp" class="ext_btn"><span class="add"></span>添加数据</a>
-                 <a href="${pageContext.request.contextPath}/templates/uploadExcel.jsp" class="ext_btn"><span class="add"></span>导入数据</a>
+                 <a href="" th:href="@{/level1/uploadExcel}" class="ext_btn"><span class="add"></span>添加数据</a>
+                 <a href="" th:href="@{/level1/uploadExcel}" class="ext_btn"><span class="add"></span>导入数据</a>
+                 <a href="" th:href="@{/}" class="ext_btn"><span class="add"></span>返回首页</a>
               </div>
             </div>
 			</div>  
@@ -118,7 +125,7 @@
               <table width="100%" border="0" cellpadding="0" cellspacing="0" class="list_table">
                 <tr>
 				   <th>
-				   <input type="checkbox" id="allboxs" onclick="allbox()"/>
+				   <input type="checkbox" id="allboxs" th:onclick="allbox()"/>
 				   </th>
                    <th>编号</th>
                    <th>经理</th>
@@ -138,36 +145,34 @@
 				   <!--<th>状态</th>-->
 				   <th>操作</th>
                  </tr>
-                <c:forEach items="${pager.records}" var="gross">
-					<tr class="tr" align="center">
+                     
+					<tr class="tr" align="center" th:each="gross:${pager.records}">
 						<td class="td_center"><input type="checkbox" name="onebox" value="${gross.id}"></td>
-						<td>${gross.id}</td>
-						<td>${gross.manager}</td>
-						<td>${gross.supervisor}</td>
-						<td>${gross.restaurantNum}</td>
-						<td>${gross.restaurantName}</td>
-						<td>
-						  <fmt:formatDate value="${gross.date}" pattern="yyyy-MM-dd"/>
-						</td>
-						<td>${gross.incomeType}</td>
-						<td>${gross.tc}</td>
-						<td>${gross.turnover}</td>
-						<td>${gross.materialCost}</td>
-						<td>${gross.grossProfit}</td>
-						<td>${gross.grossRate}</td>
-						<td>${gross.lwturnover}</td>
-						<td>${gross.lwgrossProfit}</td>
-						<td>${gross.lwgrossRate}</td>
+						<td th:text="${gross.id}"></td>
+						<td th:text="${gross.manager}"></td>
+						<td th:text="${gross.supervisor}"></td>
+						<td th:text="${gross.restaurantNum}"></td>
+						<td th:text="${gross.restaurantName}"></td>
+						<td th:text="${#dates.format(gross.date,'yyyy-MM-dd')}"></td>
+						<td th:text="${gross.incomeType}"></td>
+						<td th:text="${gross.tc}"></td>
+						<td th:text="${gross.turnover}"></td>
+						<td th:text="${gross.materialCost}"></td>
+						<td th:text="${gross.grossProfit}"></td>
+						<td th:text="${gross.grossRate}"></td>
+						<td th:text="${gross.lwturnover}"></td>
+						<td th:text="${gross.lwgrossProfit}"></td>
+						<td th:text="${gross.lwgrossRate}"></td>
 						
 						<!--<td id="td_${h.id}">${h.state==1?"启用":"禁用"}</td>-->
 						<td>
 						<!--<a id="a_${h.id}" href="javascript:chageSate(${h.id});">${h.state==0?"启用":"禁用"}</a> |&nbsp;--> 
-						<a href="${pageContext.request.contextPath}/house/getOneHouseInfo?id=${gross.id}">编辑</a>|&nbsp; 
-						<%-- <a href="/house/deleteOneHouseInfo?id=${h.id}" onclick="del()">删除</a> --%>
-						<a href="javascript:void(0)" onclick="del(${gross.id})">删除</a>
+						<a href="#">编辑</a>|&nbsp; 
+						<!-- <a href="/house/deleteOneHouseInfo?id=${h.id}" onclick="del()">删除</a> -->
+						<a href="javascript:void(0)" onclick="del(${gross.id})" th:onclick="|delall()|">删除</a>
 						</td>
 					</tr>
-				</c:forEach>
+				
 				 
                <tr>
                	<td colspan="6"></td>
@@ -175,47 +180,50 @@
 				<td colspan="6" align="center">
 				     <div class="page mt10">
 						<div class="pagination">
-						
 						  <ul >
-							  <li class="first-child"><a href="javascript:goPage(1);">首页</a></li>
-							  <c:if test="${pager.pageIndex>1}">
-							  <li><a href="javascript:goPage(${pager.pageIndex-1});">上一页</a></li>
-							  </c:if>
-							  <!-- 展示页数 -->
-							  <c:forEach items="${pager.numbers}" var="num">
-							     <!-- 判断是当前页码，文字展示为红色 -->
-							     <c:if test="${num==pager.pageIndex}">
-							     	<li class="active"><span style="color: red;">${num}</span></li>
-							     </c:if>
-							     <!-- 判断是不是当前页码，文字展示为灰色 -->
-							    <c:if test="${num!=pager.pageIndex}">
-							      <li><a href="javascript:goPage(${num});">${num}</a></li>
-							    </c:if>
-							  </c:forEach>
-							  <c:if test="${pager.pageIndex<pager.pageCount}">
-							  <li><a href="javascript:goPage(${pager.pageIndex+1});">下一页</a></li>
-							  </c:if>
-							  <li><a href="javascript:goPage(${pager.pageCount});">末页</a></li>
-						      <li><span>共${pager.totalCount}条数据</span></li>
-			     			  <li><span>共${pager.pageCount}页</span></li>
+							  <li class="first-child">
+							  <a href="javascript:goPage(1);" th:href="|javascript:goPage(1);|">首页</a>
+							  </li>
+							  <!-- 上一页 -->
+							  <li th:if="${pager.pageIndex>1}">
+							  <a href="javascript:goPage(${pager.pageIndex-1});" th:href="|javascript:goPage(${pager.pageIndex-1});|">上一页</a>
+							  </li>
+							
+							<!--  展示页数 -->
+						    <li th:each="num:${pager.numbers}">
+						      <!--   判断是当前页码，文字展示为红色 -->
+						      <span style="color: red;" th:if="${num==pager.pageIndex}" th:text="${num}">${num}</span>
+						      <!--  判断是不是当前页码，文字展示为灰色 -->
+						      <a href="javascript:goPage(${num});" th:if="${num!=pager.pageIndex}"  th:text="${num}" th:href="|javascript:goPage(${num});|">${num}</a>
+						    </li>
+							  
+							  <!-- 下一页 -->
+							  <li th:if="${pager.pageIndex<pager.pageCount}">
+							  <a href="javascript:goPage(${pager.pageIndex+1});" th:href="|javascript:goPage(${pager.pageIndex+1});|">下一页</a>
+							  </li>
+							  <!-- 末页 -->
+							  <li><a href="javascript:goPage(${pager.pageCount});" th:href="|javascript:goPage(${pager.pageCount});|">末页</a></li>
+						      <li><span>共[[${pager.totalCount}]]条数据</span></li>
+			     			  <li><span>共[[${pager.pageCount}]]页</span></li>
 			     			  <li>
-			     			  	<input type="button" name="button" class="btn btn82 btn_del" value="GO" onclick="tiaoPage(${pager.pageCount})">
+			     			  	<input type="button" name="button" class="btn btn82 btn_del" value="GO" th:onclick="|tiaoPage(${pager.pageCount})|">
 				         		<input type="text" name="number" class="input-text lh25" size="4" id="number">
 			     			  </li>
 			     			  <li>
-								每页<select id="pageNumber" onchange="chagePageSize(${pager.pageIndex});">
-									   <option value="5" ${pager.pageSize==5?"selected":""}>5</option>
-									   <option value="10" ${pager.pageSize==10?"selected":""}>10</option>
-									   <option value="15" ${pager.pageSize==15?"selected":""}>15</option>
-									   <option value="20" ${pager.pageSize==20?"selected":""}>20</option>
-									   <option value="30" ${pager.pageSize==30?"selected":""}>30</option>
-									   <option value="40" ${pager.pageSize==40?"selected":""}>40</option>
-									   <option value="50" ${pager.pageSize==50?"selected":""}>50</option>
-									   <option value="70" ${pager.pageSize==70?"selected":""}>70</option>
+								每页<select id="pageNumber" th:onchange="|chagePageSize(${pager.pageIndex});|">
+									   <option value="5" th:selected="${pager.pageSize eq 5}">5</option>
+									   <option value="10" th:selected="${pager.pageSize eq 10}">10</option>
+									   <option value="15" th:selected="${pager.pageSize eq 15}">15</option>
+									   <option value="20" th:selected="${pager.pageSize eq 20}">20</option>
+									   <option value="30" th:selected="${pager.pageSize eq 30}">30</option>
+									   <option value="40" th:selected="${pager.pageSize eq 40}">40</option>
+									   <option value="50" th:selected="${pager.pageSize eq 50}">50</option>
+									   <option value="70" th:selected="${pager.pageSize eq 70}">70</option>
 					               </select>
 					                                   条
 							 </li>
 						  </ul>
+						
 						</div>
                      </div>
 				</td>

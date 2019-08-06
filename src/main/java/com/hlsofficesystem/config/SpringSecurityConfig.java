@@ -13,7 +13,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		 //定制请求的授权规则
-        http.authorizeRequests().antMatchers("/").permitAll()
+        http.authorizeRequests()
+        		.antMatchers("/").permitAll()
                 .antMatchers("/level1/**").hasRole("VIP1")
                 .antMatchers("/level2/**").hasRole("VIP2")
                 .antMatchers("/level3/**").hasRole("VIP3");

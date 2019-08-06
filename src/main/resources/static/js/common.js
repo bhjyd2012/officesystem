@@ -35,7 +35,7 @@ $(function(){
    			if (num==1) {
    				if (confirm("下载Excel模板")==true) {
    					//window.open("/static/exceltemplate/gross.xls");
-   				 	window.location.href = "/crud/gross/downloadExcel";
+   				 	window.location.href = "/crud/level1/gross/downloadExcel";
    			
    				 	
    				}
@@ -76,7 +76,7 @@ $(function(){
    		//数据展示按钮
    		function showBtn (num){
    			if (num==1) {
- 				window.location.href="/gross/showList/1/10";
+ 				window.location.href="/crud/level1/gross/showList/1/10";
    			}
    			if (num==2) {
  				window.location.href="/regionalprofit/showList/1/10";
@@ -90,22 +90,28 @@ $(function(){
    			if (confirm("确定导入Excel文件！")==true) {
 	   			if(num==1){
 	   				if ($('#location01').val()!="") {
-	   					alert($("#importFileForm")[0]);
-	   					if($("#importFileForm")[0]!=null){
-	   						var formData = new FormData($("#importFileForm")[0]);
-	   						alert("123456");
+	   					
+	   					if($("[name='importFileForm']")[0]!=null){
+	   					    //显示
+							$("#loadingModal01").modal('show');
+	   						var formData = new FormData($("[name='importFileForm']")[0]);
+	   						//alert("123456");
 	   						$.ajax({
 	   							type:"post",
-	   							url:"/crud/gross/uploadExcel",
+	   							url:"/crud/level1/gross/uploadExcel",
 	   							data:formData,
-	   							async:false,
+	   							//async:false,
 	   							cache: false, 
 				                contentType: false, 
 				                processData: false, 
 				                success: function (result) {
-				                    alert(result.message);
+				                	//隐藏
+									$("#loadingModal01").modal('hide');
+									alert(result.message);
 				                },
 				                error : function() {
+				                	//隐藏
+									$("#loadingModal01").modal('hide');
 				                     alert("提交异常!");
 				                }
 	   						});

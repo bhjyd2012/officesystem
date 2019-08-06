@@ -20,7 +20,7 @@ public class LoginController {
 	 * 欢迎页
 	 * @return
 	 */
-	@GetMapping("/")
+	@RequestMapping("/")
 	public String index() {
 		return "welcome";
 	}
@@ -29,7 +29,7 @@ public class LoginController {
 	 * 登陆页
 	 * @return
 	 */
-	@GetMapping("/userlogin")
+	@RequestMapping("/userlogin")
 	public String loginPage() {
 		return PREFIX+"login";
 	}
@@ -39,7 +39,7 @@ public class LoginController {
 	 * @param path
 	 * @return
 	 */
-	@GetMapping("/level1/{path}")
+	@RequestMapping("/level1/{path}")
 	public String level1(@PathVariable("path")String path) {
 		return PREFIX+"level1/"+path;
 	}
@@ -49,7 +49,7 @@ public class LoginController {
 	 * @param path
 	 * @return
 	 */
-	@GetMapping("/level2/{path}")
+	@RequestMapping("/level2/{path}")
 	public String level2(@PathVariable("path")String path) {
 		return PREFIX+"level2/"+path;
 	}
@@ -59,7 +59,7 @@ public class LoginController {
 	 * @param path
 	 * @return
 	 */
-	@GetMapping("/level3/{path}")
+	@RequestMapping("/level3/{path}")
 	public String level3(@PathVariable("path")String path) {
 		return PREFIX+"level3/"+path;
 	}

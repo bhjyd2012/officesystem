@@ -2,12 +2,10 @@ package com.hlsofficesystem.controller;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
+import com.alibaba.druid.stat.TableStat.Name;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hlsofficesystem.bean.Gross;
@@ -47,7 +47,7 @@ import com.hlsofficesystem.utils.RegionalprofitUploadExcel;
  * @since 2019-07-22
  */
 @Controller
-@RequestMapping("/gross")
+@RequestMapping("/level1/gross")
 public class GrossController {
 
 	@Autowired
@@ -65,35 +65,52 @@ public class GrossController {
 	@RequestMapping(value = "/uploadExcel")
 	@ResponseBody
 	public Message uploadExcel(MultipartFile uploadFile,HttpServletRequest request) {
-		System.out.println(uploadFile);
+		//MultipartFile可接收多个
+		//System.out.println(uploadFile);
 		Message message = new Message();
 		if (uploadFile!=null) {
 			  try {
-				  String path = ResourceUtils.getFile("classpath:static/exceltemplate/upload").getPath();
-				  String realPath = path.replace("target\\classes\\static\\exceltemplate\\upload", "src\\main\\resources\\static\\exceltemplate\\upload");
-	               //1.上传文件
+	               MultipartRequest multipartRequest = (MultipartRequest)request;
+	               MultipartFile file = multipartRequest.getFile("uploadFile");
+	               //处理上传文件名不同
+	               String name = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("\\")+1);
+	               System.err.println("111"+file.getOriginalFilename()+"================="+name);
+	               File file2 = new File(name);
+				  //1.上传文件
+	               
 	               //String realPath = request.getRealPath("static/exceltemplate/upload");
-	               System.out.println(realPath);
+	               System.out.println("222"+file2.getAbsolutePath()+"--------------------"+file2.getPath());
 	               //2.得到文件的名称
-				  String filename = uploadFile.getOriginalFilename();
-				  System.out.println(filename);
+				  String filename = file.getOriginalFilename();
 				  //3.上传文件
-				  uploadFile.transferTo(new File(realPath+"\\"+filename));
-				  System.out.println("uploadurl+++++++"+uploadFile);
+				  String path = "src\\main\\resources\\static\\exceltemplate\\upload\\";
+				  //文件所在路径
+				  System.out.println(file2.getAbsolutePath());
+				  String replacepath = file2.getAbsolutePath().replace(name,path+name);
+				  System.err.println("333==="+replacepath);
+				  file.transferTo(new File(replacepath));
+				  
 				  //4、给数据库添加数据
-				  List<Gross> grosses = GrossUploadExcel.grossUploadExcel(filename,realPath);
+				  List<Gross> grosses = GrossUploadExcel.grossUploadExcel(name,replacepath);
 				  for (Gross gross : grosses) {
-				       System.out.println("----------"+gross);
-				    }
-				  boolean boo = grossService.excelToMysqlDB(grosses);
-				  if (boo) {
-				  	message.setMessage("数据导入成功！");
-				return message;
-				  } else {
-				message.setMessage("数据导入失败！");
-				return message;
+				     System.out.println("----------"+gross);
 				  }
-	           } catch (Exception e) {
+				  if(grosses!=null) {
+					  boolean boo = grossService.excelToMysqlDB(grosses);
+					  if (boo) {
+						  	message.setMessage("数据导入成功！");
+						  	return message;
+						  } else {
+							message.setMessage("数据导入失败！");
+							return message;
+						  }
+				  }
+				  
+	           }catch (IllegalArgumentException e) {
+	        	   message.setMessage("上传文件格式模板有误！");
+	        	   e.printStackTrace();
+	           } 
+			  catch (Exception e) {
 	        	   message.setMessage("导入文件内容为空！");
 	        	   e.printStackTrace();
 	           }
@@ -123,7 +140,7 @@ public class GrossController {
 	           System.out.println(serverpath);
 	           //检查服务器上有没有模板文件，没有就创建
 	           if(!f.exists()){
-	        	   RegionalprofitUploadExcel.regionalprofitDownloadExcel(serverpath);
+	        	   GrossUploadExcel.grossDownloadExcel(serverpath);
 	           }
 			
            //创建http头信息的对象
@@ -157,7 +174,7 @@ public class GrossController {
 			GrossQuery grossQuery,
 			@PathVariable("pageIndex")Integer pageIndex,
 			@PathVariable("pageSize")Integer pageSize,
-			ModelMap modelmap
+			ModelMap model
 			) {
 		System.out.println(grossQuery+"----"+pageIndex+"----"+pageSize);
 		//分页工具
@@ -176,11 +193,14 @@ public class GrossController {
 	 	entityWrapper.orderBy("id").last("desc");
 		
 		//符合条件查询出的结果集
-		Page<Gross> results = grossService.selectPage(page, entityWrapper);
+		Page<Gross> results = grossService.selectPage(page,entityWrapper);
+		System.out.println(results);
 		//获取总条数
 		Integer totalCount = ((Long)results.getTotal()).intValue();
+		System.out.println(totalCount);
 		//获取总页数
 		Integer pageCount = ((Long)results.getPages()).intValue();
+		System.out.println(pageCount);
 		//查询是否有上一页
 		//boolean hasPrevious = results.hasPrevious();
 		//查询是否有下一页
@@ -192,17 +212,18 @@ public class GrossController {
 		 * for (House house : houses) { Housetype housetype =
 		 * housetypeService.selectById(house.getTypeid());
 		 * house.setHousetype(housetype); }
-		 
-		 for (Gross gross : grosses) {
-			System.out.println(gross);
+		 */
+		/*for (Gross gross : grosses) {
+		System.out.println(gross);
 		}*/
 		 //用自定义的工具类分装数据，返回页面显示
 		Pager<Gross> pager = new Pager<Gross>(pageIndex, pageSize, pageCount, totalCount, grosses);
 		
-		modelmap.put("pager", pager);
-		modelmap.put("query", grossQuery);
+		model.put("pager",pager);
+		model.put("query",grossQuery);
+		//model.addAttribute("aaa", "aaaaaa");
 		
-		return "/templates/grossExcelList.jsp";
+		return "pages/level1/grossExcelList";
 		
 	}
 	

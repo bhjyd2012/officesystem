@@ -8,14 +8,16 @@
 <body>
 <h1 align="center">欢迎光临管理系统</h1>
 <div sec:authorize="!isAuthenticated()">
-	<h2 align="center">游客您好，如果想查看 <a th:href="@{/userlogin}">请登录</a></h2>
+	<h2 align="center">您好还未登陆，如果想查看 <a th:href="@{/userlogin}">请登录</a></h2>
 </div>
 <div sec:authorize="isAuthenticated()">
-	<h2><span sec:authentication="name"></span>，您好,您的角色有：
+	<h2><span sec:authentication="name"></span>，您好,您的角色有权限：
 		<span sec:authentication="principal.authorities"></span></h2>
-	<form th:action="@{/logout}" method="post">
-		<input type="submit" value="注销"/>
-	</form>
+		<span>
+			<form th:action="@{/logout}" method="post">
+			<input type="submit" value="注销"/>
+			</form>
+		</span>
 </div>
 
 <hr>
@@ -24,7 +26,7 @@
 	<h3>财务统计</h3>
 	<ul>
 		<li><a th:href="@{/level1/uploadExcel}">财务统计报表上传</a></li>
-		<li><a th:href="@{/level1/2}">财务统计报表展示</a></li>
+		<li><a th:href="@{/level1/gross/showList/1/10}">财务统计报表展示</a></li>
 		<li><a th:href="@{/level1/3}">财务统计报表下载</a></li>
 	</ul>
 

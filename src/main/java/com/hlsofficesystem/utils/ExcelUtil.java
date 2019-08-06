@@ -96,12 +96,11 @@ public class ExcelUtil {
 			if (filename.endsWith(".xls")) {
 				System.out.println("执行的是xls");
 				// Excel-2003
-				workbook = new HSSFWorkbook(new FileInputStream(path+"\\"+filename));
+				workbook = new HSSFWorkbook(new FileInputStream(path));
 			} else if (filename.endsWith(".xlsx")) {
 				System.out.println("执行的是xlsx");
 				// Excel-2007
-				//System.out.println(uploadFile);
-				workbook = new XSSFWorkbook(new FileInputStream(path+"\\"+filename));
+				workbook = new XSSFWorkbook(new FileInputStream(path));
 				
 			} else {
 				// 未知内容

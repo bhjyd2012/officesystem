@@ -46,41 +46,35 @@ public class GrossUploadExcel {
 	 */  
 	public static List<Gross> grossUploadExcel(String filename,String path)throws Exception{
 		List<Gross> grosses = new ArrayList<Gross>();
-		/*
-		 * File file = new File(pathUrl); InputStream inputStream = new
-		 * FileInputStream(file); POIFSFileSystem fs = new POIFSFileSystem(inputStream);
-		 */
-		//String filename = uploadFile.getOriginalFilename();
-		//System.out.println("web++++:"+filename);
-		System.out.println("web++++:"+filename+"-----------"+path);
 		//创建excel对象变量
 		Workbook workbook = ExcelUtil.creatWorkbook(filename, path);
-		System.out.println("web++++:"+workbook);
 		Sheet sheet = workbook.getSheetAt(0);//获取第一个sheet
-		System.out.println("sheet:"+sheet);
-		if (sheet!=null) {
-			//遍历行ROW
-			for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-				Row row = sheet.getRow(i);//每一行
-				if (row==null) {
-					continue;
-				}
-				//创建存放数据的对象
-				Gross gross = new Gross();
-				//遍历列cell
-				for (int j = 0; j <=row.getLastCellNum(); j++) {
-					Cell cell = row.getCell(j);//每一列
-					if (cell==null) {
-					continue;
+		int coloumNum=sheet.getRow(0).getPhysicalNumberOfCells();
+		System.out.println("总列数"+coloumNum);
+		if (coloumNum==15) {
+			if (sheet!=null) {
+				//遍历行ROW
+				for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+					Row row = sheet.getRow(i);//每一行
+					if (row==null) {
+						continue;
 					}
-					setGross(j, gross, cell);
-					
-				}
-				System.out.println("===="+gross);
-				//把Excel数据添加进list集合里
-				grosses.add(gross);
+					//创建存放数据的对象
+					Gross gross = new Gross();
+					//遍历列cell
+					for (int j = 0; j <=row.getLastCellNum(); j++) {
+						Cell cell = row.getCell(j);//每一列
+						if (cell==null) {
+						continue;
+						}
+						setGross(j, gross, cell);
+					}
+					//把Excel数据添加进list集合里
+					grosses.add(gross);
+				}				
 			}
-			
+		}else {
+			System.out.println("导入模板格式有误");
 		}
 	
 		workbook.close();
@@ -205,7 +199,6 @@ public class GrossUploadExcel {
 				
 			}
 		
-		System.err.println(gross);
 		return gross;
 	}
 	
