@@ -19,32 +19,55 @@ import com.hlsofficesystem.bean.Regionalprofit;
 
 
 public class RegionalprofitUploadExcel {
-	public static List<Regionalprofit> regionalprofitUploadExcel(MultipartFile uploadFile)throws Exception{
+	public static List<Regionalprofit> regionalprofitUploadExcel(String filename,String path)throws Exception{
 		List<Regionalprofit> regionalprofits = new ArrayList<Regionalprofit>();
 		
-		String filename = uploadFile.getOriginalFilename();
+		//String filename = uploadFile.getOriginalFilename();
 		
 		//创建excel对象变量
-		/*
-		 * Workbook workbook = ExcelUtil.creatWorkbook(filename, uploadFile);
-		 * 
-		 * Sheet sheet = workbook.getSheetAt(0);//获取第一个sheet if (sheet!=null) { //遍历行ROW
-		 * for (int i = 1; i <= sheet.getLastRowNum(); i++) { Row row =
-		 * sheet.getRow(i);//每一行 if (row==null) { continue; }
-		 * System.out.println("row========================="); //创建存放数据的对象
-		 * Regionalprofit regionalprofit = new Regionalprofit(); //遍历列cell for (int j =
-		 * 0; j <= row.getLastCellNum(); j++) { Cell cell = row.getCell(j);//每一列 if
-		 * (cell==null) { continue; }
-		 * //System.out.println(sheet.getRow(3).getCell(1).getDateCellValue());
-		 * //setRegionalprofit = setRegionalprofit(j,
-		 * regionalprofit,cell,sheet.getRow(0)); setRegionalprofit(j,
-		 * regionalprofit,cell,sheet.getRow(0)); } //把Excel数据添加进list集合里
-		 * System.out.println(regionalprofit); regionalprofits.add(regionalprofit); }
-		 * 
-		 * } else { System.out.println("sheet为空！"); }
-		 */
 		
-		//workbook.close();
+		  Workbook workbook = ExcelUtil.creatWorkbook(filename,path);
+		  
+		  Sheet sheet = workbook.getSheetAt(0);
+		  int coloumNum=sheet.getRow(0).getPhysicalNumberOfCells();
+			System.out.println("总列数"+coloumNum);
+			if (coloumNum==5) {
+				//获取第一个sheet 
+				  if (sheet!=null) { 
+					  //遍历行ROW
+				  for (int i = 1; i <= sheet.getLastRowNum(); i++) { 
+						  Row row =sheet.getRow(i);
+						  //每一行 
+						  if (row==null) { 
+							  continue; 
+							  }
+					  System.out.println("row========================="); 
+					  //创建存放数据的对象
+					  Regionalprofit regionalprofit = new Regionalprofit(); 
+					  //遍历列cell 
+					  for (int j =
+					  0; j <= row.getLastCellNum(); j++) { 
+						  Cell cell = row.getCell(j);
+						  //每一列
+					  if(cell==null) { 
+						  continue; 
+						  }
+					  //System.out.println(sheet.getRow(3).getCell(1).getDateCellValue());
+					  Regionalprofit setRegionalprofit = setRegionalprofit(j,regionalprofit,cell,sheet.getRow(0)); 
+					  setRegionalprofit(j,regionalprofit,cell,sheet.getRow(0)); 
+					  }
+					  //把Excel数据添加进list集合里
+					  regionalprofits.add(regionalprofit); 
+				  }
+				  
+				  } 
+			}else {
+				System.out.println("导入模板格式有误!");
+			}
+		  
+		 
+		
+		workbook.close();
 		return regionalprofits;
 	}
 	

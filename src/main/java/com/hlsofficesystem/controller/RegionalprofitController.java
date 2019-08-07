@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -42,7 +43,7 @@ import org.springframework.ui.ModelMap;
  * @since 2019-07-25
  */
 @Controller
-@RequestMapping("/regionalprofit")
+@RequestMapping("/level2/regionalprofit")
 public class RegionalprofitController {
 	@Autowired
 	private RegionalprofitService regionalprofitService;
@@ -57,17 +58,26 @@ public class RegionalprofitController {
 		
 		if (uploadFile!=null) {
 			  try {
-	               //1.上传文件
-	            @SuppressWarnings("deprecation")
-				String realPath = request.getRealPath("/WEB-INF/static/exceltemplate/upload");
-	               System.out.println(realPath);
+				  MultipartRequest multipartRequest = (MultipartRequest)request;
+	               MultipartFile file = multipartRequest.getFile("uploadFile");
+	               //处理上传文件名不同
+	               String name = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("\\")+1);
+	               System.err.println("111"+file.getOriginalFilename()+"================="+name);
+	               File file2 = new File(name);
+	               	//1.上传文件
+	               
+	               System.out.println("222"+file2.getAbsolutePath()+"--------------------"+file2.getPath());
 	               //2.得到文件的名称
-	               String filename = uploadFile.getOriginalFilename();
-	               System.out.println(filename);
-	               //3.上传文件
-	               uploadFile.transferTo(new File(realPath+"/"+filename));
+				  String filename = file.getOriginalFilename();
+				  //3.上传文件
+				  String path = "src\\main\\resources\\static\\exceltemplate\\upload\\";
+				  //文件所在路径
+				  System.out.println(file2.getAbsolutePath());
+				  String replacepath = file2.getAbsolutePath().replace(name,path+name);
+				  System.err.println("333==="+replacepath);
+				  file.transferTo(new File(replacepath));
 	               //4、给数据库添加数据
-				 List<Regionalprofit> regionalprofit = RegionalprofitUploadExcel.regionalprofitUploadExcel(uploadFile);
+				 List<Regionalprofit> regionalprofit = RegionalprofitUploadExcel.regionalprofitUploadExcel(name,replacepath);
 				 
 				 boolean boo = regionalprofitService.insertBatch(regionalprofit);
 				 if (boo) {
@@ -83,7 +93,10 @@ public class RegionalprofitController {
 					 message.setMessage("数据导入失败！");
 					return message;
 				 }
-	           } catch (Exception e) {
+	           }catch (IllegalArgumentException e) {
+	        	   message.setMessage("上传文件格式模板有误！");
+	        	   e.printStackTrace();
+	           }catch (Exception e) {
 	        	   message.setMessage("导入文件内容为空！");
 	           }
 		} else {
@@ -104,9 +117,10 @@ public class RegionalprofitController {
 	@RequestMapping(value = "/downloadExcel")
 	public ResponseEntity<byte[]> downloadExcel(HttpServletRequest request) {
 		ResponseEntity<byte[]> resp=null;
+		String path = System.getProperty("user.dir");
+		String serverpath = path.replace("officesystem", "officesystem\\src\\main\\resources\\static\\exceltemplate\\regionalprofit.xls");
 		try {
-		   @SuppressWarnings("deprecation")
-		   String serverpath=request.getRealPath("/WEB-INF/static/exceltemplate/regionalprofit.xls");
+		   //String serverpath=request.getRealPath("/WEB-INF/static/exceltemplate/regionalprofit.xls");
 		   File f=new File(serverpath);
            System.out.println(serverpath);
            //检查服务器上有没有模板文件，没有就创建
@@ -180,7 +194,7 @@ public class RegionalprofitController {
 		modelmap.put("pager", pager);
 		modelmap.put("query", regionalprofitQuery);
 		
-		return "/templates/regionalprofitExcelList.jsp";
+		return "pages/level2/regionalprofitExcelList";
 		
 	}
 	

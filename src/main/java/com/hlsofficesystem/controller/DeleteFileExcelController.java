@@ -25,13 +25,15 @@ public class DeleteFileExcelController {
      * @throws   
      */  
     //@Scheduled(cron = "0 15 10 ? * SUN")//每周日上午10点15分清理上传文件夹  
-	@Scheduled(cron = "0 30 22 ? * SUN")
+	@Scheduled(cron = "0 0 11 * * ?")
     public void deleteFileWithCron() {  
 		
 		System.out.println("开始清空上传文件夹中Excel文件");
-		String realPath = this.getClass().getResource("/").getPath();
-		String urlString = realPath.replaceAll("/target/classes/", "/src/main/webapp/WEB-INF/static/exceltemplate/upload/");
-		if (ExcelUtil.deleteFile(urlString)) {
+		String path = System.getProperty("user.dir");
+		String serverpath = path.replace("officesystem", "officesystem/src/main/resources/static/exceltemplate/upload/");
+		/*String realPath = this.getClass().getResource("/").getPath();
+		String urlString = realPath.replaceAll("/target/classes/", "/src/main/webapp/WEB-INF/static/exceltemplate/upload/");*/
+		if (ExcelUtil.deleteFile(serverpath)) {
 			System.out.println("删除成功！");
 		} else {
 			System.out.println("没有可删除Excel文件！");

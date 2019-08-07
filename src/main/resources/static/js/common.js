@@ -44,7 +44,7 @@ $(function(){
    			if (num==2) {
    				if (confirm("下载Excel模板")==true) {
    					//window.location.href = "";
-   					window.location.href = "/crud/regionalprofit/downloadExcel";
+   					window.location.href = "/crud/level2/regionalprofit/downloadExcel";
 		}
    			}
    			if (num==3) {
@@ -79,7 +79,7 @@ $(function(){
  				window.location.href="/crud/level1/gross/showList/1/10";
    			}
    			if (num==2) {
- 				window.location.href="/regionalprofit/showList/1/10";
+ 				window.location.href="/crud/level2/regionalprofit/showList/1/10";
    			}
    			if (num==3) {
  				window.location.href="/gross/showList/1/10";
@@ -124,15 +124,15 @@ $(function(){
 	   			if(num==2){
 	   			
    				if ($('#location02').val()!="") {
-   					//alert($("[name='importFileForm']")[1])
+   					alert($("[name='importFileForm']")[0]+"表单");
    					if($("[name='importFileForm']")[0]!=null){
 	   						var formData = new FormData($("[name='importFileForm']")[0]);
-	   						alert(formData);
+	   						alert(formData+"localtion2");
 	   						$.ajax({
 	   							type:"post",
-	   							url:"/regionalprofit/uploadExcel",
+	   							url:"/crud/level2/regionalprofit/uploadExcel",
 	   							data:formData,
-	   							async:false,
+	   							//async:false,
 	   							cache: false, 
 				                  contentType: false, 
 				                  processData: false, 
